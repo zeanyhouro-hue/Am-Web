@@ -1,0 +1,82 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#0d0f15">
+<title>AM Preset Player</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-set" viewBox="0 0 24 24"><path d="M5 4v16M12 4v16M19 4v16"/><circle cx="5" cy="15" r="2" fill="#0d0f15"/><circle cx="12" cy="8" r="2" fill="#0d0f15"/><circle cx="19" cy="13" r="2" fill="#0d0f15"/></symbol>
+<symbol id="i-exp" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+<symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+<symbol id="i-loop" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+<symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/></symbol>
+<symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H5" fill="currentColor"/></symbol>
+</defs></svg>
+<div id="drop">Lepas file di sini (XML, foto, video, audio)</div>
+<header class="hd"><div class="ap">▶</div><div class="tt"><b>AM Preset Player</b><span id="meta">Memuat preset...</span></div>
+<button class="ib" data-view="proyek" aria-label="Proyek"><svg class="i"><use href="#i-file"/></svg></button><button class="ib" data-view="logs" aria-label="Log"><svg class="i"><use href="#i-bolt"/></svg></button><button class="ib" data-view="settings" aria-label="Setelan"><svg class="i"><use href="#i-set"/></svg></button></header>
+<div class="stage" id="pv"><canvas id="cv"></canvas><button id="fs" aria-label="Layar penuh"><svg class="i"><use href="#i-exp"/></svg></button></div>
+<section class="tm"><div class="r1"><input type="range" class="rg" id="timeline" min="0" max="1000" value="0" aria-label="Posisi"><button class="sq s" id="rs2" aria-label="Awal"><svg class="i"><use href="#i-undo"/></svg></button></div>
+<div class="r2"><button class="sq" id="rs" aria-label="Ulang"><svg class="i"><use href="#i-undo"/></svg></button><button class="pl" id="playBtn">❚❚ &nbsp;Jeda</button><button class="sq lp" id="loopBtn" aria-label="Loop"><svg class="i"><use href="#i-loop"/></svg></button><span id="time">0.00s / 0.00s</span></div></section>
+<main class="sc" id="sc">
+<section class="view on" id="v-proyek">
+<div class="cd"><h2><svg class="i"><use href="#i-file"/></svg>Preset XML</h2>
+<label class="up"><svg class="i"><use href="#i-up"/></svg><b>Pilih file .xml</b><small>Boleh 2 file sekaligus (preset + grup/cc). File juga bisa diseret ke layar ini.</small><input id="xmlFile" type="file" accept=".xml,text/xml,image/*,video/*,audio/*" multiple hidden></label>
+<div class="mono" id="pinfo">preset: -</div>
+<div class="f"><textarea id="px" rows="3" placeholder="Atau tempel Project XML di sini"></textarea></div>
+<div class="f"><button class="b2 w" id="pxb">Muat XML</button></div>
+<div class="f"><button class="b2 w" id="smp"><svg class="i"><use href="#i-undo"/></svg>Kembali ke preset contoh</button></div></div>
+<div class="cd"><h2><svg class="i"><use href="#i-link"/></svg>Tempel link preset</h2><div class="f"><input id="lnk" placeholder="Link alightcreative.com, alight.link, Drive, atau .xml/.zip"><button class="b2" id="lnkGo">Muat</button></div><div class="mono" id="lnkSt">belum ada link</div><small class="hn">Mendukung link share AM, link langsung .xml/.zip/.alightmotion, dan Google Drive ("Siapa saja dengan tautan"). Link diambil lewat server (/api/fetch), jadi tidak kena CORS.</small></div>
+</section>
+<section class="view" id="v-media">
+<div class="cd"><h2><svg class="i"><use href="#i-image"/></svg>Slot media preset</h2><p class="hn" style="margin-top:0">Tiap slot punya tombol Perbarui file. Ketuk, lalu pilih foto/video dari galeri perangkat.</p><div class="sg slotsBox"></div></div>
+<div class="cd"><h2><svg class="i"><use href="#i-film"/></svg>Galeri media</h2><button class="b2 w" id="am"><svg class="i"><use href="#i-up"/></svg>Tambah foto, video, atau audio</button><p class="hn">Media baru ditambahkan ke galeri, tidak menimpa yang lama.</p><div class="gal" id="gal"></div></div>
+<div class="cd"><h2><svg class="i"><use href="#i-exp"/></svg>Ukuran tampilan</h2><div class="fl">Skala foto <b id="psv">1.00x</b></div><input type="range" class="rg" id="ps" min=".2" max="2" step=".05" value="1">
+<label class="fs">Ukuran kotak layer<select id="bx"><option value="2" selected>Auto x2 (bawaan AM)</option><option value="1">1x = bentang penuh</option><option value="2">x2 = setengah bentang</option></select></label></div>
+</section>
+<section class="view" id="v-audio">
+<div class="cd"><h2><svg class="i"><use href="#i-music"/></svg>Track audio scene</h2><p class="hn" style="margin-top:0">Track audio dari XML. Pilih file audio untuk tiap slot atau unggah yang baru.</p><div class="audBox"></div><div class="f"><input class="af" type="file" accept="audio/*"><button class="b2" data-a="1">Pasang</button></div></div>
+<div class="cd"><h2><svg class="i"><use href="#i-loop"/></svg>Sinkronisasi</h2><div class="mono" id="asy">audio: -
+sync: -</div><button class="b2 w" id="fit">Cocokkan kecepatan audio ke project</button>
+<div class="fl">Kecepatan audio <b id="asv">1.000x</b></div><input type="range" class="rg" id="as" min=".5" max="2" step=".001" value="1">
+<label class="ck"><input type="checkbox" id="pp" checked>Pertahankan pitch</label>
+<div class="fl">Geser gambar terhadap audio <b id="ofv">0 ms</b></div><input type="range" class="rg" id="of" min="-500" max="500" step="5" value="0">
+<label class="ck"><input type="checkbox" id="vm">Putar suara dari layer video</label><small class="hn">Nonaktif = layer video dibisukan</small></div>
+<div class="cd"><h2><svg class="i"><use href="#i-down"/></svg>Audio dari TikTok</h2><div class="f"><input placeholder="https://vt.tiktok.com/..."><button class="b2" data-au2="1">Ambil</button></div><div class="mono amb">belum ada media</div></div>
+<div class="cd"><h2><svg class="i"><use href="#i-down"/></svg>Audio dari Google Drive</h2><div class="f"><input placeholder="https://drive.google.com/file/d/ID/view?usp=sharing"><button class="b2" data-au2="1">Ambil</button></div><div class="mono amb">belum ada audio</div><small class="hn">Untuk file mp3 / m4a / wav / ogg yang dishare di Drive dengan akses "Siapa saja dengan tautan".</small></div>
+</section>
+<section class="view" id="v-layer">
+<div class="lh"><b>Layer</b><span id="nl">0 layer</span><button class="b2" id="grp">Buka Semua Grup</button><button class="b2" id="mkb"><svg class="i" style="width:14px;height:14px"><use href="#i-flag"/></svg>Penanda</button><button class="b2" id="sl">‹</button></div>
+<div class="zr"><button class="sq" id="sr">›</button><button class="sq" id="zc" aria-label="Ke playhead"><svg class="i"><use href="#i-exp"/></svg></button><button class="sq" id="zo">−</button><input type="range" class="rg" id="zs" min="1" max="20" step=".1" value="1"><button class="sq" id="zi">+</button><b id="zv">1.0x</b><button class="b2" id="zf">Muat layar</button></div>
+<div class="bc" id="bc"></div><div class="tl" id="tl"></div>
+<div class="dt" id="det">Ketuk blok layer mana saja untuk melihat detail dan preview medianya.</div>
+<div class="lg" id="lg"></div>
+</section>
+<section class="view" id="v-ekspor">
+<div class="cd"><h2><svg class="i"><use href="#i-film"/></svg>Ekspor video</h2>
+<label class="fs">Resolusi (sisi pendek)<select id="xr"><option value="0">Sama preview</option><optgroup label="Hemat"><option>270</option><option>360</option><option>480</option></optgroup><optgroup label="Umum"><option>540</option><option selected>720</option><option>960</option><option>1080</option></optgroup><optgroup label="Tinggi - perlu HP/GPU kuat"><option>1440</option></optgroup></select></label>
+<label class="fs">FPS<select id="xf"><option>24</option><option selected>30</option><option>60</option></select></label>
+<label class="fs">Kualitas Video<select id="xq"><option value="1">Hemat</option><option value="2" selected>Sedang</option><option value="3">Tinggi</option></select></label>
+<div class="f"><button class="b2 w" id="xb" style="background:var(--ac);color:#04121a;font-weight:600;border-color:var(--ac)">Mulai ekspor</button><button class="b2" id="xc">Batal</button></div>
+<div class="pg"><div id="pb"></div></div><p class="hn" id="xs">siap - pilih resolusi dan FPS. Audio dari track scene ikut terekam.</p><video id="xv" controls playsinline hidden style="width:100%;border-radius:10px"></video></div>
+</section>
+<section class="view" id="v-logs"><div class="cd"><h2><svg class="i"><use href="#i-bolt"/></svg>Log</h2><pre id="logs">Belum ada log.</pre><p class="hn" id="info">-</p></div></section>
+<section class="view" id="v-settings"><div class="cd"><h2><svg class="i"><use href="#i-set"/></svg>Setelan</h2>
+<label class="fs">Kualitas render preview (sisi pendek)<select id="qq"><option>270</option><option selected>360</option><option>480</option><option>640</option><option>960</option></select></label>
+<label class="fs">Target FPS<select id="fp"><option value="60">60 (mulus)</option><option value="30" selected>30 (hemat)</option><option value="24">24</option><option value="15">15 (paling ringan)</option></select></label>
+<label class="fs">Rasio project<select id="rr"><option value="1080x1920">9:16 (1080x1920)</option><option value="1080x1080">1:1 (1080x1080)</option><option value="1080x1350">4:5 (1080x1350)</option><option value="1920x1080">16:9 (1920x1080)</option><option value="custom">Custom</option></select></label>
+<div class="f"><input id="rw" type="number" min="16" max="4096" placeholder="Lebar"><input id="rh" type="number" min="16" max="4096" placeholder="Tinggi"><button class="b2" id="rgo">Terapkan</button></div>
+<label class="fs">CORS proxy (opsional)<input id="pxu" placeholder="https://proxy-anda/?url={url}"></label>
+<p class="hn">Pintasan papan tik: Spasi putar/jeda, panah kiri/kanan mundur/maju 1 detik, L loop.</p></div></section>
+</main>
+<nav class="nv"><button class="on" data-view="proyek"><svg class="i"><use href="#i-file"/></svg>Proyek</button><button data-view="media"><svg class="i"><use href="#i-image"/></svg>Media</button><button data-view="audio"><svg class="i"><use href="#i-music"/></svg>Audio</button><button data-view="layer"><svg class="i"><use href="#i-layers"/></svg>Layer</button><button data-view="ekspor"><svg class="i"><use href="#i-film"/></svg>Ekspor</button></nav>
+<input type="file" id="fm" hidden multiple accept="image/*,video/*,audio/*">
+<script src="app.js"></script>
+<script src="runtime.js"></script></body></html>
